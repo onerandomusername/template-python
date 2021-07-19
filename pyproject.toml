@@ -2,8 +2,7 @@
 name = "application"
 version = "0.1.0"
 description = "A package"
-authors = ["onerandomusername <genericusername414@gmail.com>",
-]
+authors = ["onerandomusername <genericusername414@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
