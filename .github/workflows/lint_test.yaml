@@ -90,6 +90,21 @@ jobs:
       - name: Checks out repository
         uses: actions/checkout@v2
 
+      # This step caches our Python dependencies. To make sure we
+      # only restore a cache when the dependencies, the python version,
+      # the runner operating system, and the dependency location haven't
+      # changed, we create a cache key that is a composite of those states.
+      #
+      # Only when the context is exactly the same, we will restore the cache.
+      - name: Python Dependency Caching
+        uses: actions/cache@v2
+        id: python_cache
+        with:
+          path: ${{ env.PYTHONUSERBASE }}
+          key: "python-0-${{ runner.os }}-${{ env.PYTHONUSERBASE }}-\
+          ${{ steps.python.outputs.python-version }}-\
+          ${{ hashFiles('./pyproject.toml', './poetry.lock') }}"
+
       # This step caches our pre-commit environment. To make sure we
       # do create a new environment when our pre-commit setup changes,
       # we create a cache key based on relevant factors.
@@ -148,6 +163,21 @@ jobs:
       # Checks out the repository in the current folder.
       - name: Checks out repository
         uses: actions/checkout@v2
+
+      # This step caches our Python dependencies. To make sure we
+      # only restore a cache when the dependencies, the python version,
+      # the runner operating system, and the dependency location haven't
+      # changed, we create a cache key that is a composite of those states.
+      #
+      # Only when the context is exactly the same, we will restore the cache.
+      - name: Python Dependency Caching
+        uses: actions/cache@v2
+        id: python_cache
+        with:
+          path: ${{ env.PYTHONUSERBASE }}
+          key: "python-0-${{ runner.os }}-${{ env.PYTHONUSERBASE }}-\
+          ${{ steps.python.outputs.python-version }}-\
+          ${{ hashFiles('./pyproject.toml', './poetry.lock') }}"
 
       # Run tests with pytest-cov to generate a coverage report
       # This is saved to ./.coverage to be used by codecov to link a
