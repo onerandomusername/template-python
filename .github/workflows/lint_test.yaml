@@ -71,32 +71,6 @@ jobs:
           pip install poetry
           poetry install
 
-      # This step caches our Python dependencies. To make sure we
-      # only restore a cache when the dependencies, the python version,
-      # the runner operating system, and the dependency location haven't
-      # changed, we create a cache key that is a composite of those states.
-      #
-      # Only when the context is exactly the same, we will restore the cache.
-      - name: Python Dependency Caching
-        uses: actions/cache@v2
-        id: python_cache
-        with:
-          path: ${{ env.PYTHONUSERBASE }}
-          key: "python-0-${{ runner.os }}-${{ env.PYTHONUSERBASE }}-\
-          ${{ steps.python.outputs.python-version }}-\
-          ${{ hashFiles('./pyproject.toml', './poetry.lock') }}"
-
-      # This step caches our pre-commit environment. To make sure we
-      # do create a new environment when our pre-commit setup changes,
-      # we create a cache key based on relevant factors.
-      - name: Pre-commit Environment Caching
-        uses: actions/cache@v2
-        with:
-          path: ${{ env.PRE_COMMIT_HOME }}
-          key: "precommit-0-${{ runner.os }}-${{ env.PRE_COMMIT_HOME }}-\
-          ${{ steps.python.outputs.python-version }}-\
-          ${{ hashFiles('./.pre-commit-config.yaml') }}"
-
       # We will not run `black` or `flake8` here, as we will use a separate
       # flake8 action. As pre-commit does not support user installs, we set
       # PIP_USER=0 to not do a user install.
